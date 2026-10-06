@@ -13,4 +13,13 @@ public interface IWorldClient
     Task<TResponse> AskAsync<TRequest, TResponse>(
         TRequest request,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Subscribes <paramref name="handler"/> to notifications of type
+    /// <typeparamref name="TNotification"/> that systems emit during a tick
+    /// (a notification is a plain struct from a <c>&lt;Feature&gt;.Data</c> module).
+    /// Safe to call from any thread. Handlers must not assume the loop thread:
+    /// implementations dispatch them on the thread pool. Dispose to stop receiving.
+    /// </summary>
+    IDisposable Subscribe<TNotification>(Func<TNotification, Task> handler);
 }
